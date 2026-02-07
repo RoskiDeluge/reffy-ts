@@ -1,6 +1,6 @@
 # reffy-ts
 
-TypeScript/Node port of the Python `reffy` app. This repo is separate so the Python project remains untouched.
+Local-first references server for Node projects with optional Linear sync.
 
 ## Install
 
@@ -45,19 +45,30 @@ node dist/cli.js init --repo .
 
 Or install globally from this folder and use `reffy init`.
 
+`reffy init` behavior:
+- Creates `AGENTS.md` if it does not exist.
+- Inserts/updates the managed Reffy block.
+- If `<!-- OPENSPEC:START -->` exists, the Reffy block is placed above it.
+
 ## Environment Variables
 
-- `LINEAR_API_KEY`
-- `LINEAR_OAUTH_TOKEN`
-- `LINEAR_TEAM_ID`
-- `LINEAR_PROJECT_ID`
-- `LINEAR_PULL_CREATE=1`
-- `LINEAR_PULL_LABEL=reffy`
-- `LINEAR_PUSH_LABEL=reffy`
-- `LINEAR_PULL_ON_START=1`
-- `LINEAR_WATCH=1`
-- `LINEAR_WATCH_PUSH=1`
-- `LINEAR_WATCH_REINDEX=1`
-- `LINEAR_WATCH_DEBOUNCE=1.0`
-- `HOST=127.0.0.1`
-- `PORT=8000`
+- `LINEAR_API_KEY` (optional; required if `LINEAR_OAUTH_TOKEN` is not set)
+- `LINEAR_OAUTH_TOKEN` (optional; required if `LINEAR_API_KEY` is not set)
+- `LINEAR_TEAM_ID` (optional; auto-picks first team when omitted)
+- `LINEAR_PROJECT_ID` (optional)
+- `LINEAR_PULL_CREATE=1` (optional; enables importing unlinked labeled issues)
+- `LINEAR_PULL_LABEL=reffy-ts` (required only when `LINEAR_PULL_CREATE=1`)
+- `LINEAR_PUSH_LABEL=reffy-ts` (optional; defaults to `reffy-ts`, set empty to disable labeling)
+- `LINEAR_PULL_ON_START=1` (optional)
+- `LINEAR_WATCH=1` (optional)
+- `LINEAR_WATCH_PUSH=1` (optional)
+- `LINEAR_WATCH_REINDEX=1` (optional)
+- `LINEAR_WATCH_DEBOUNCE=1.0` (optional)
+- `LINEAR_PULL_CREATE_CONFLICTS=1` (optional; set `0` to disable conflict-copy creation on pull)
+- `HOST=127.0.0.1` (optional)
+- `PORT=8000` (optional)
+
+Auth notes:
+- Use either `LINEAR_API_KEY` or `LINEAR_OAUTH_TOKEN`.
+- If both are set, `LINEAR_OAUTH_TOKEN` is used first.
+- API key is simplest for single-user/local use; OAuth token is typically used for app-based/user-authorized flows.
