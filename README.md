@@ -53,7 +53,7 @@ npm run build
 npm start
 ```
 
-The server defaults to `http://127.0.0.1:8000`.
+The server defaults to `http://127.0.0.1:8787`.
 
 
 ## API Endpoints
@@ -107,7 +107,7 @@ See `.env.example` for a complete example configuration.
 - `LINEAR_WATCH_DEBOUNCE=1.0` (optional)
 - `LINEAR_PULL_CREATE_CONFLICTS=1` (optional; set `0` to disable conflict-copy creation on pull)
 - `HOST=127.0.0.1` (optional)
-- `PORT=8000` (optional)
+- `PORT=8787` (optional)
 
 Auth notes:
 - Use either `LINEAR_API_KEY` or `LINEAR_OAUTH_TOKEN`.

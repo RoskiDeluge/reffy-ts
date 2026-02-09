@@ -206,7 +206,7 @@ async function start(): Promise<void> {
       watcher.start();
     }
 
-    const port = Number(process.env.PORT ?? "8000");
+    const port = Number(process.env.PORT ?? "8787");
     const host = process.env.HOST ?? "127.0.0.1";
 
     const shutdown = (): void => {
