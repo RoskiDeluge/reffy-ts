@@ -4,9 +4,21 @@ Local-first references server for Node projects with optional Linear sync.
 
 ## Install
 
+Recommended usage in another Node project:
+
 ```bash
-npm install
+npm install github:RoskiDeluge/reffy-ts
 ```
+
+The install runs this package's `prepare` step, which builds `dist/` automatically.
+
+Then inside that project:
+
+```bash
+npx reffy init
+```
+
+This creates/updates `AGENTS.md` and inserts the managed Reffy block in the correct location.
 
 Create your local environment file:
 
@@ -14,7 +26,21 @@ Create your local environment file:
 cp .env.example .env
 ```
 
+You can run the server with:
+
+```bash
+node node_modules/reffy-ts/dist/server.js
+```
+
+On first startup, `.references/` structure is bootstrapped automatically.
+
 ## Develop
+
+For local development of this repo itself:
+
+```bash
+npm install
+```
 
 ```bash
 npm run dev
@@ -28,6 +54,7 @@ npm start
 ```
 
 The server defaults to `http://127.0.0.1:8000`.
+
 
 ## API Endpoints
 
@@ -49,7 +76,13 @@ npm run build
 node dist/cli.js init --repo .
 ```
 
-Or install globally from this folder and use `reffy init`.
+If installed in another project as a dependency:
+
+```bash
+npx reffy init
+```
+
+Or install globally and use `reffy init`.
 
 `reffy init` behavior:
 - Creates `AGENTS.md` if it does not exist.
