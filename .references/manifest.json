@@ -1,7 +1,7 @@
 {
   "version": 1,
   "created_at": "2026-02-10T07:30:56.589Z",
-  "updated_at": "2026-02-10T07:30:56.590Z",
+  "updated_at": "2026-02-11T00:21:39.279Z",
   "artifacts": [
     {
       "id": "94230c06-d190-46da-9004-27d705b48a49",
@@ -13,6 +13,28 @@
       "tags": [],
       "created_at": "2026-02-10T07:30:56.590Z",
       "updated_at": "2026-02-10T07:30:56.590Z"
+    },
+    {
+      "id": "d8b5bd8b-bbf7-4e9a-add9-21272a8f51c4",
+      "name": "openspec handoff summary",
+      "filename": "openspec-handoff-summary.md",
+      "kind": "note",
+      "mime_type": "text/markdown",
+      "size_bytes": 1906,
+      "tags": [],
+      "created_at": "2026-02-11T00:06:10.183Z",
+      "updated_at": "2026-02-11T00:06:10.183Z"
+    },
+    {
+      "id": "8c3cbaa2-a464-4126-ac87-40e66907ddde",
+      "name": "testing coverage plan",
+      "filename": "testing-coverage-plan.md",
+      "kind": "note",
+      "mime_type": "text/markdown",
+      "size_bytes": 1856,
+      "tags": [],
+      "created_at": "2026-02-11T00:21:39.277Z",
+      "updated_at": "2026-02-11T00:21:39.277Z"
     }
   ]
 }

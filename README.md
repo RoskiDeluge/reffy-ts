@@ -2,6 +2,8 @@
 
 CLI-first references workflow for Node projects.
 
+Reffy is intended as an ideation layer for spec-driven development (SDD) in straightforward, agent-friendly markdown files.
+
 ## Install
 
 Recommended usage in another Node project:
@@ -21,14 +23,16 @@ npx reffy init
 npx reffy bootstrap
 npx reffy reindex
 npx reffy validate
+npx reffy summarize
 ```
 
 Command summary:
 
-- `reffy init`: idempotently creates/updates `AGENTS.md` managed instructions block.
+- `reffy init`: idempotently creates/updates root `AGENTS.md` managed block and `.references/AGENTS.md`.
 - `reffy bootstrap`: idempotently runs `init`, ensures `.references/` structure exists, then reindexes artifacts.
 - `reffy reindex`: scans `.references/artifacts` and adds missing files to `.references/manifest.json`.
 - `reffy validate`: validates `.references/manifest.json` against manifest v1 contract.
+- `reffy summarize`: generates a read-only handoff summary from indexed artifacts.
 
 Output modes:
 
@@ -41,6 +45,8 @@ Examples:
 ```bash
 npx reffy reindex --output json
 npx reffy validate --repo .
+npx reffy summarize --output text
+npx reffy summarize --output json
 ```
 
 ## Manifest v1 Contract
@@ -99,4 +105,7 @@ For local development of this repo:
 npm install
 npm run build
 npm run check
+npm test
 ```
+
+Testing includes a coverage gate with a minimum global threshold of 80%.
