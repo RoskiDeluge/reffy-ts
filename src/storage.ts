@@ -164,10 +164,14 @@ export class ReferencesStore {
     return artifact;
   }
 
-  public async reindexArtifacts(): Promise<{ added: number; total: number }> {
+  public async reindexArtifacts(): Promise<{ added: number; removed: number; total: number }> {
     const manifest = await this.readManifest();
-    const known = new Set(manifest.artifacts.map((a) => a.filename));
     const entries = await fs.readdir(this.artifactsDir, { withFileTypes: true });
+    const filesOnDisk = new Set(entries.filter((entry) => entry.isFile()).map((entry) => entry.name));
+    const beforeCount = manifest.artifacts.length;
+    manifest.artifacts = manifest.artifacts.filter((artifact) => filesOnDisk.has(artifact.filename));
+    const removed = beforeCount - manifest.artifacts.length;
+    const known = new Set(manifest.artifacts.map((a) => a.filename));
     let added = 0;
 
     for (const entry of entries) {
@@ -192,12 +196,12 @@ export class ReferencesStore {
       added += 1;
     }
 
-    if (added > 0) {
+    if (added > 0 || removed > 0) {
       manifest.updated_at = utcNow();
       await this.writeManifest(manifest);
     }
 
-    return { added, total: manifest.artifacts.length };
+    return { added, removed, total: manifest.artifacts.length };
   }
 
   public async validateManifest() {

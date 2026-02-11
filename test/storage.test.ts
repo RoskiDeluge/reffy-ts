@@ -1,4 +1,4 @@
-import { writeFile } from "node:fs/promises";
+import { rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -44,6 +44,22 @@ describe("ReferencesStore", () => {
     expect(result.added).toBe(1);
     const artifacts = await store.listArtifacts();
     expect(artifacts.some((a) => a.filename === "new-note.md")).toBe(true);
+  });
+
+  it("removes manifest entries for files deleted from artifacts directory", async () => {
+    const repo = await createTempRepo();
+    const store = new ReferencesStore(repo.repoRoot);
+
+    const created = await store.createArtifact({
+      name: "to delete",
+      content: "remove me",
+    });
+    await rm(path.join(store.artifactsDir, created.filename), { force: true });
+
+    const result = await store.reindexArtifacts();
+    expect(result.removed).toBe(1);
+    expect(result.total).toBe(0);
+    expect(await store.getArtifact(created.id)).toBeNull();
   });
 
   it("validates manifest through store facade", async () => {

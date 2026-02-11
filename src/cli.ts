@@ -264,7 +264,7 @@ async function main(): Promise<number> {
       console.log(`Bootstrapped ${store.refsDir}`);
       console.log(`Updated ${agents.root_agents_path}`);
       console.log(`Updated ${agents.reffy_agents_path}`);
-      console.log(`Reindex: added=${String(reindex.added)} total=${String(reindex.total)}`);
+      console.log(`Reindex: added=${String(reindex.added)} removed=${String(reindex.removed)} total=${String(reindex.total)}`);
     }
     return 0;
   }
@@ -277,7 +277,9 @@ async function main(): Promise<number> {
     if (output === "json") {
       printResult(output, payload);
     } else {
-      console.log(`Reindex complete: added=${String(reindex.added)} total=${String(reindex.total)}`);
+      console.log(
+        `Reindex complete: added=${String(reindex.added)} removed=${String(reindex.removed)} total=${String(reindex.total)}`,
+      );
     }
     return 0;
   }

@@ -30,7 +30,7 @@ Command summary:
 
 - `reffy init`: idempotently creates/updates root `AGENTS.md` managed block and `.references/AGENTS.md`.
 - `reffy bootstrap`: idempotently runs `init`, ensures `.references/` structure exists, then reindexes artifacts.
-- `reffy reindex`: scans `.references/artifacts` and adds missing files to `.references/manifest.json`.
+- `reffy reindex`: reconciles `.references/manifest.json` with `.references/artifacts` by adding missing files and removing stale entries.
 - `reffy validate`: validates `.references/manifest.json` against manifest v1 contract.
 - `reffy summarize`: generates a read-only handoff summary from indexed artifacts.
 
