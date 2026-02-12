@@ -1,9 +1,9 @@
 # Project Context
 
 ## Purpose
-`reffy-ts` is a CLI-first references workflow for Node projects.
+`reffy-ts` is a CLI-first, framework-agnostic references workflow for any repo.
 The project provides a `reffy` command that initializes managed assistant instructions in `AGENTS.md`, manages a `.references/` workspace, reindexes artifacts into a manifest, and validates that manifest against a v1 contract.
-Primary goals are idempotent setup, predictable local file-based behavior, and straightforward integration into existing Node repos.
+Primary goals are idempotent setup, predictable local file-based behavior, and straightforward integration into existing repositories.
 
 ## Tech Stack
 - TypeScript (strict mode) targeting Node.js `>=20`

@@ -1,7 +1,7 @@
 {
   "name": "reffy-ts",
   "version": "0.3.0",
-  "description": "CLI-first references workflow for Node projects (TypeScript)",
+  "description": "CLI-first, framework-agnostic references workflow for any repo (TypeScript)",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",

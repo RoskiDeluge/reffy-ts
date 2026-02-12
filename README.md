@@ -1,12 +1,10 @@
 # reffy-ts
 
-CLI-first references workflow for Node projects.
-
-Reffy is intended as an ideation layer for spec-driven development (SDD) in straightforward, agent-friendly markdown files.
+Reffy is intended as an ideation layer for spec-driven development (SDD) in straightforward, version controlled and agent-friendly markdown files.
 
 ## Install
 
-Recommended usage in another Node project:
+Recommended usage in any repo:
 
 ```bash
 npm install github:RoskiDeluge/reffy-ts
