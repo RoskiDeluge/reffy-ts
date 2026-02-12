@@ -56,7 +56,7 @@ npx reffy summarize --output json
 `reffy-ts` is designed to complement spec-driven development workflows rather than replace them. A common pattern is:
 
 1. Use Reffy for ideation and context capture in `.references/`.
-2. Use an SDD framework (for example OpenSpec) for formal proposals/specs/tasks.
+2. Use an SDD framework (for example [OpenSpec](https://github.com/Fission-AI/OpenSpec)) for formal proposals/specs/tasks.
 3. Keep a clear handoff from exploratory artifacts to formal specs.
 
 Reference implementation in this repo:
