@@ -7,7 +7,7 @@ Reffy is intended as an ideation layer for spec-driven development (SDD) in stra
 Recommended usage in any repo:
 
 ```bash
-npm install github:RoskiDeluge/reffy-ts
+npm install -g github:RoskiDeluge/reffy-ts
 ```
 
 The install runs this package's `prepare` step, which builds `dist/` automatically.
@@ -17,12 +17,12 @@ The install runs this package's `prepare` step, which builds `dist/` automatical
 Inside your project:
 
 ```bash
-npx reffy init
-npx reffy bootstrap
-npx reffy doctor
-npx reffy reindex
-npx reffy validate
-npx reffy summarize
+reffy init
+reffy bootstrap
+reffy doctor
+reffy reindex
+reffy validate
+reffy summarize
 ```
 
 Command summary:
@@ -43,12 +43,12 @@ Output modes:
 Examples:
 
 ```bash
-npx reffy reindex --output json
-npx reffy validate --repo .
-npx reffy doctor --output text
-npx reffy doctor --output json
-npx reffy summarize --output text
-npx reffy summarize --output json
+reffy reindex --output json
+reffy validate --repo .
+reffy doctor --output text
+reffy doctor --output json
+reffy summarize --output text
+reffy summarize --output json
 ```
 
 ## Using Reffy With SDD Frameworks (OpenSpec Example)
@@ -70,7 +70,7 @@ Reference implementation in this repo:
 
 Practical connection pattern for any repo:
 
-1. Run `npx reffy init` to install/refresh the Reffy instruction layer.
+1. Run `reffy init` to install/refresh the Reffy instruction layer.
 2. Keep your SDD framework instructions (for example OpenSpec) in the same root `AGENTS.md`.
 3. During planning, cite only relevant Reffy artifacts from `.references/artifacts/` in your proposal/spec docs.
 4. Continue implementation in your SDD framework's normal review/approval process.
@@ -85,4 +85,3 @@ npm run build
 npm run check
 npm test
 ```
-
