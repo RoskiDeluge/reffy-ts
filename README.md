@@ -1,4 +1,4 @@
-# reffy-ts
+# reffy
 
 Reffy is intended as an ideation layer for spec-driven development (SDD) in straightforward, version controlled and agent-friendly markdown files.
 
@@ -7,7 +7,7 @@ Reffy is intended as an ideation layer for spec-driven development (SDD) in stra
 Recommended usage in any repo:
 
 ```bash
-npm install -g github:RoskiDeluge/reffy-ts
+npm install -g reffy-cli
 ```
 
 The install runs this package's `prepare` step, which builds `dist/` automatically.
@@ -53,7 +53,7 @@ reffy summarize --output json
 
 ## Using Reffy With SDD Frameworks (OpenSpec Example)
 
-`reffy-ts` is designed to complement spec-driven development workflows rather than replace them. A common pattern is:
+`reffy` is designed to complement spec-driven development workflows rather than replace them. A common pattern is:
 
 1. Use Reffy for ideation and context capture in `.references/`.
 2. Use an SDD framework (for example [OpenSpec](https://github.com/Fission-AI/OpenSpec)) for formal proposals/specs/tasks.

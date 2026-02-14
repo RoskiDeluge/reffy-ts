@@ -1,7 +1,7 @@
 # Change: Add automated testing with 80% coverage gate
 
 ## Why
-`reffy-ts` currently validates build and types but lacks an enforced automated testing baseline. Adding a coverage-gated test workflow will reduce regression risk as CLI functionality grows.
+`reffy` currently validates build and types but lacks an enforced automated testing baseline. Adding a coverage-gated test workflow will reduce regression risk as CLI functionality grows.
 
 ## What Changes
 - Introduce a test runner and coverage tooling compatible with Node ESM TypeScript.
