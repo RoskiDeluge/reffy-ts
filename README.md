@@ -8,8 +8,6 @@ Reffy is intended as an ideation layer for spec-driven development (SDD) in stra
 
 ## Install
 
-Recommended usage in any repo:
-
 ```bash
 npm install -g reffy-cli
 ```
