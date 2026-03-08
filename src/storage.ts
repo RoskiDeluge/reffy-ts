@@ -4,6 +4,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { inferArtifactType, MANIFEST_VERSION, validateManifest } from "./manifest.js";
+import { resolveRefsDir } from "./refs-paths.js";
 import type { Artifact, Manifest } from "./types.js";
 
 function utcNow(): string {
@@ -22,7 +23,7 @@ export class ReferencesStore {
 
   constructor(repoRoot: string) {
     this.repoRoot = repoRoot;
-    this.refsDir = path.join(repoRoot, ".reffy");
+    this.refsDir = resolveRefsDir(repoRoot);
     this.artifactsDir = path.join(this.refsDir, "artifacts");
     this.manifestPath = path.join(this.refsDir, "manifest.json");
     this.ensureStructure();

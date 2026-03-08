@@ -5,6 +5,7 @@ import path from "node:path";
 
 import { renderDiagram } from "./diagram.js";
 import { runDoctor } from "./doctor.js";
+import { DEFAULT_REFS_DIRNAME, looksLikeRefsDir, resolveRefsDirName } from "./refs-paths.js";
 import { ReferencesStore } from "./storage.js";
 import { summarizeArtifacts } from "./summarize.js";
 
@@ -20,34 +21,36 @@ const REFFY_ASCII = [
   "                   |___/ ",
 ].join("\n");
 
-const REFFY_BLOCK = `<!-- REFFY:START -->
+function buildReffyBlock(refsDirName: string): string {
+  return `<!-- REFFY:START -->
 # Reffy Instructions
 
 These instructions are for AI assistants working in this project.
 
-Always open \`@/.reffy/AGENTS.md\` when the request:
+Always open \`@/${refsDirName}/AGENTS.md\` when the request:
 - Mentions early-stage ideation, exploration, brainstorming, or raw notes
 - Needs context before drafting specs or proposals
 - Refers to "reffy", "references", "explore", or "context layer"
 
-Use \`@/.reffy/AGENTS.md\` to learn:
+Use \`@/${refsDirName}/AGENTS.md\` to learn:
 - Reffy workflow and artifact conventions
 - How Reffy and OpenSpec should be sequenced
-- How to store and consume ideation context in \`.reffy/\`
+- How to store and consume ideation context in \`${refsDirName}/\`
 
 Keep this managed block so \`reffy init\` can refresh the instructions.
 
 <!-- REFFY:END -->`;
+}
 
-const REFFY_AGENTS_RELATIVE = path.join(".reffy", "AGENTS.md");
-const REFFY_AGENTS_CONTENT = `# Reffy Instructions
+function buildReffyAgentsContent(refsDirName: string): string {
+  return `# Reffy Instructions
 
 These instructions are for AI assistants working in this project.
 
 ## TL;DR Checklist
 
 - Decide whether Reffy ideation is needed for this request.
-- If needed, read existing context in \`.reffy/artifacts/\`.
+- If needed, read existing context in \`${refsDirName}/artifacts/\`.
 - Add/update exploratory artifacts and keep them concise.
 - Run \`reffy reindex\` and \`reffy validate\` after artifact changes.
 - After ideation approval, run \`reffy summarize --output json\` and pick only directly relevant artifacts for proposal citations.
@@ -68,9 +71,9 @@ You can skip Reffy when the request is:
 
 ## Reffy Workflow
 
-1. Read existing artifacts in \`.reffy/artifacts/\`.
+1. Read existing artifacts in \`${refsDirName}/artifacts/\`.
 2. Add or update artifacts to capture exploratory context.
-3. Run \`reffy reindex\` to index newly added files into \`.reffy/manifest.json\`.
+3. Run \`reffy reindex\` to index newly added files into \`${refsDirName}/manifest.json\`.
 4. Run \`reffy validate\` to verify manifest contract compliance.
 
 ## Relationship To OpenSpec
@@ -110,35 +113,42 @@ No Reffy references used.
 
 ## Artifact Conventions
 
-- Treat \`.reffy/\` as a repository-local guidance and ideation context layer.
+- Treat \`${refsDirName}/\` as a repository-local guidance and ideation context layer.
 - Keep artifact names clear and stable.
 - Prefer markdown notes for exploratory content.
 - Keep manifests machine-readable and schema-compliant (version 1).
 `;
+}
 
 const REFFY_START = "<!-- REFFY:START -->";
 const REFFY_END = "<!-- REFFY:END -->";
 const OPENSPEC_START = "<!-- OPENSPEC:START -->";
 
 function upsertReffyBlock(content: string): string {
+  return upsertReffyBlockForDir(content, DEFAULT_REFS_DIRNAME);
+}
+
+function upsertReffyBlockForDir(content: string, refsDirName: string): string {
+  const reffyBlock = buildReffyBlock(refsDirName);
   if (content.includes(REFFY_START) && content.includes(REFFY_END)) {
     const prefix = content.split(REFFY_START)[0] ?? "";
     const suffix = content.split(REFFY_END, 2)[1] ?? "";
     const trimmedSuffix = suffix.trimStart();
-    return trimmedSuffix.length > 0 ? `${prefix}${REFFY_BLOCK}\n\n${trimmedSuffix}` : `${prefix}${REFFY_BLOCK}\n`;
+    return trimmedSuffix.length > 0 ? `${prefix}${reffyBlock}\n\n${trimmedSuffix}` : `${prefix}${reffyBlock}\n`;
   }
 
   if (content.includes(OPENSPEC_START)) {
     const [before, after] = content.split(OPENSPEC_START, 2);
-    return `${before.trimEnd()}\n\n${REFFY_BLOCK}\n\n${OPENSPEC_START}${after}`;
+    return `${before.trimEnd()}\n\n${reffyBlock}\n\n${OPENSPEC_START}${after}`;
   }
 
-  return content.trim().length > 0 ? `${REFFY_BLOCK}\n\n${content.trimStart()}` : `${REFFY_BLOCK}\n`;
+  return content.trim().length > 0 ? `${reffyBlock}\n\n${content.trimStart()}` : `${reffyBlock}\n`;
 }
 
 async function initAgents(repoRoot: string): Promise<{ root_agents_path: string; reffy_agents_path: string }> {
+  const refsDirName = resolveRefsDirName(repoRoot);
   const agentsPath = path.join(repoRoot, "AGENTS.md");
-  const reffyAgentsPath = path.join(repoRoot, REFFY_AGENTS_RELATIVE);
+  const reffyAgentsPath = path.join(repoRoot, refsDirName, "AGENTS.md");
   let content = "";
   try {
     content = await fs.readFile(agentsPath, "utf8");
@@ -146,10 +156,10 @@ async function initAgents(repoRoot: string): Promise<{ root_agents_path: string;
     content = "";
   }
 
-  const updated = upsertReffyBlock(content);
+  const updated = upsertReffyBlockForDir(content, refsDirName);
   await fs.mkdir(path.dirname(reffyAgentsPath), { recursive: true });
   await fs.writeFile(agentsPath, updated, "utf8");
-  await fs.writeFile(reffyAgentsPath, REFFY_AGENTS_CONTENT, "utf8");
+  await fs.writeFile(reffyAgentsPath, buildReffyAgentsContent(refsDirName), "utf8");
   return { root_agents_path: agentsPath, reffy_agents_path: reffyAgentsPath };
 }
 
@@ -169,11 +179,11 @@ function discoverRepoRoot(startDir: string): string {
   let current = path.resolve(startDir);
 
   while (true) {
-    if (path.basename(current) === ".reffy" && isDirectory(path.join(current, "artifacts"))) {
+    if (looksLikeRefsDir(current)) {
       return path.dirname(current);
     }
 
-    if (isDirectory(path.join(current, ".reffy"))) {
+    if (isDirectory(path.join(current, DEFAULT_REFS_DIRNAME)) || isDirectory(path.join(current, ".references"))) {
       return current;
     }
 
